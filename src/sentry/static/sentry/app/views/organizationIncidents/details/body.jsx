@@ -4,6 +4,7 @@ import styled from 'react-emotion';
 
 import {PageContent} from 'app/styles/organization';
 import {t} from 'app/locale';
+import IdBadge from 'app/components/idBadge';
 import LineChart from 'app/components/charts/lineChart';
 import Link from 'app/components/links/link';
 import MarkPoint from 'app/components/charts/components/markPoint';
@@ -141,7 +142,22 @@ export default class DetailsBody extends React.Component {
                 ]}
               />
             )}
+
             <IncidentsSuspects suspects={[]} />
+
+            <div>
+              <SidebarHeading>
+                Projects Affected ({incident ? incident.projects.length : '-'})
+              </SidebarHeading>
+
+              {incident && (
+                <div>
+                  {incident.projects.map(project => {
+                    return <IdBadge key={project} project={{slug: project}} />;
+                  })}
+                </div>
+              )}
+            </div>
           </PageContent>
         </Sidebar>
       </StyledPageContent>
@@ -188,4 +204,16 @@ const SeenByTab = styled('li')`
 
 const StyledSeenByList = styled(SeenByList)`
   margin-top: 0;
+`;
+
+const ChartPlaceholder = styled('div')`
+  background-color: ${p => p.theme.offWhite};
+  height: 190px;
+  margin-bottom: 10px;
+`;
+
+const SidebarHeading = styled('h6')`
+  color: ${p => p.theme.gray3};
+  margin: ${space(2)} 0 ${space(1)} 0;
+  text-transform: uppercase;
 `;
