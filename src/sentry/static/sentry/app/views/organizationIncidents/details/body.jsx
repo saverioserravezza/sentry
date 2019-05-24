@@ -9,6 +9,7 @@ import LineChart from 'app/components/charts/lineChart';
 import Link from 'app/components/links/link';
 import MarkPoint from 'app/components/charts/components/markPoint';
 import NavTabs from 'app/components/navTabs';
+import Projects from 'app/utils/projects';
 import SeenByList from 'app/components/seenByList';
 import SentryTypes from 'app/sentryTypes';
 import space from 'app/styles/space';
@@ -112,7 +113,7 @@ export default class DetailsBody extends React.Component {
         </Main>
         <Sidebar>
           <PageContent>
-            {incident && (
+            {incident ? (
               <LineChart
                 isGroupedByDate
                 series={[
@@ -141,6 +142,8 @@ export default class DetailsBody extends React.Component {
                   },
                 ]}
               />
+            ) : (
+              <ChartPlaceholder />
             )}
 
             <IncidentsSuspects suspects={[]} />
@@ -152,9 +155,13 @@ export default class DetailsBody extends React.Component {
 
               {incident && (
                 <div>
-                  {incident.projects.map(project => {
-                    return <IdBadge key={project} project={{slug: project}} />;
-                  })}
+                  <Projects slugs={incident.projects} orgId={params.orgId}>
+                    {({projects, fetching}) => {
+                      return projects.map(project => (
+                        <StyledIdBadge key={project.slug} project={project} />
+                      ));
+                    }}
+                  </Projects>
                 </div>
               )}
             </div>
@@ -216,4 +223,8 @@ const SidebarHeading = styled('h6')`
   color: ${p => p.theme.gray3};
   margin: ${space(2)} 0 ${space(1)} 0;
   text-transform: uppercase;
+`;
+
+const StyledIdBadge = styled(IdBadge)`
+  margin-bottom: ${space(1)};
 `;
