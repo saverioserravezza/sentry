@@ -37,6 +37,7 @@ class EventDetails extends React.Component {
     api: PropTypes.object,
     params: PropTypes.object,
     eventSlug: PropTypes.string.isRequired,
+    onTagSelect: PropTypes.func.isRequired,
   };
 
   state = {
@@ -92,12 +93,13 @@ class EventDetails extends React.Component {
     if (this.state.error) {
       return <NotFound />;
     }
+    const {onTagSelect} = this.props;
     const {event, activeTab} = this.state;
 
     return (
       <ColumnGrid>
         <ContentColumn>
-          <EventHeader event={this.state.event} />
+          <EventHeader event={event} />
           <NavTabs underlined={true}>
             {event.entries.map(entry => {
               if (!INTERFACES.hasOwnProperty(entry.type)) {
@@ -145,7 +147,7 @@ class EventDetails extends React.Component {
         <SidebarColumn>
           <EventMetadata event={event} />
           <SidebarBlock>
-            <TagsTable tags={event.tags} />
+            <TagsTable tags={event.tags} onTagSelect={onTagSelect} />
           </SidebarBlock>
         </SidebarColumn>
       </ColumnGrid>
