@@ -93,7 +93,7 @@ describe('OrganizationEventsV2', function() {
   });
 
   it('navigates when tag values are clicked', async function() {
-    const organization = TestStubs.Organization({projects: [TestStubs.Project()]});
+    const {organization, router, routerContext} = initializeOrg();
     const wrapper = mount(
       <OrganizationEventsV2
         organization={organization}
